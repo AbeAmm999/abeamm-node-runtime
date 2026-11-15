@@ -10,11 +10,6 @@ app.use(express.json({ limit: "32kb" }));
 const PORT = Number(process.env.PORT || 10000);
 const API_TOKEN = process.env.ABEAMM_RUNTIME_TOKEN;
 
-if (!API_TOKEN) {
-  console.error("Missing ABEAMM_RUNTIME_TOKEN. Set it in the service environment.");
-  process.exit(1);
-}
-
 const startedAt = Date.now();
 const timingSafeEqual = (a, b) => {
   const aa = Buffer.from(String(a));
@@ -27,6 +22,9 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api", (req, res, next) => {
+  if (!API_TOKEN) {
+    return res.status(503).json({ error: "Runtime token is not configured" });
+  }
   const supplied = req.header("authorization")?.replace(/^Bearer\s+/i, "") || "";
   if (!timingSafeEqual(supplied, API_TOKEN)) {
     return res.status(401).json({ error: "Unauthorized" });
