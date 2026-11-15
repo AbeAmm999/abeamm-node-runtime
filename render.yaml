@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: abeamm-node-runtime
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ABEAMM_RUNTIME_TOKEN
+        sync: false
