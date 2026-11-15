@@ -27,7 +27,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api", (req, res, next) => {
-  const supplied = req.header("authorization")?.replace(/^Bearer\\s+/i, "") || "";
+  const supplied = req.header("authorization")?.replace(/^Bearer\s+/i, "") || "";
   if (!timingSafeEqual(supplied, API_TOKEN)) {
     return res.status(401).json({ error: "Unauthorized" });
   }
